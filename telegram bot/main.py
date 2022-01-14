@@ -11,9 +11,12 @@ import config, question
 
 #забираем токен из конфига
 
-bot = (config.token)
-songs = (question.songs)
+bot = (config.token) #забираем токен
+songs = (question.songs) #импортируем json
+dictData = json.loads(songs)
 
+text_answer = (dictData["answer"]) #Вытаскиваем ответ
+text_question = (dictData["question"]) #Вытаскиваем вопрос
 
 bot_token = bot
 if not bot_token:
@@ -68,8 +71,8 @@ async def cmd_question(message: types.Message):
 
 
 
-dictData = json.loads(songs)
-text_question = (dictData["question"])
+
+
 
 ##################################################
 
@@ -79,10 +82,19 @@ text_question = (dictData["question"])
 
 
 
-@dp.message_handler(commands="Героиня")
+#@dp.message_handler(commands="Героиня")
+
+@dp.message_handler()
 
 async def answer_message(msg: types.Message):
-    await bot.send_message(msg.from_user.id, 'Правильно')
+    client_text = (msg["text"])
+    if text_answer == client_text:
+        await bot.send_message(msg.from_user.id, 'Правильно')
+        print(msg)
+    else:
+        await bot.send_message(msg.from_user.id, 'Не правильно')
+        print(msg)
+    # print(client_text)
 
 
 
